@@ -1,1 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Night of a Thousand Crusade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#060b1e;
+    --navy-mid:#0c1638;
+    --navy-panel:#101e46;
+    --gold:#d9ae4e;
+    --gold-bright:#f6dd93;
+    --gold-dim:#a5822f;
+    --ivory:#f4efe2;
+    --line:rgba(217,174,78,0.35);
+  }
 
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 12% 0%, rgba(217,174,78,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 700px at 100% 20%, rgba(37,63,140,0.35), transparent 55%),
+      linear-gradient(160deg, var(--navy-deep) 0%, var(--navy-mid) 55%, #081029 100%);
+    min-height:100vh;
+    font-family:'Poppins', sans-serif;
+    color:var(--ivory);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 20px;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* ambient floating particles */
+  .particle{
+    position:fixed;
+    width:3px; height:3px;
+    background:var(--gold-bright);
+    border-radius:50%;
+    opacity:0;
+    filter:blur(0.3px);
+    animation:drift 9s linear infinite;
+    pointer-events:none;
+  }
+  @keyframes drift{
+    0%{opacity:0; transform:translateY(0) translateX(0);}
+    10%{opacity:0.8;}
+    90%{opacity:0.4;}
+    100%{opacity:0; transform:translateY(-160px) translateX(30px);}
+  }
+
+  .stage{
+    position:relative;
+    width:100%;
+    max-width:1200px;
+    background:
+      /* warm out-of-focus city lights, upper right */
+      radial-gradient(circle at 88% 10%, rgba(255,205,120,0.35) 0%, rgba(255,205,120,0.16) 6%, transparent 12%),
+      radial-gradient(circle at 95% 18%, rgba(255,190,110,0.30) 0%, rgba(255,190,110,0.12) 5%, transparent 10%),
+      radial-gradient(circle at 80% 4%, rgba(255,220,150,0.22) 0%, transparent 9%),
+      /* cool window glow, right side */
+      radial-gradient(ellipse 420px 520px at 100% 35%, rgba(70,100,180,0.22), transparent 60%),
+      /* wood-desk warmth rising from the bottom */
+      linear-gradient(0deg, rgba(64,42,24,0.55) 0%, rgba(40,28,20,0.28) 16%, transparent 34%),
+      /* base navy room tone */
+      linear-gradient(155deg, #081128 0%, #0a1636 55%, #0c1a40 100%);
+    border-radius:22px;
+    border:1px solid var(--line);
+    box-shadow:0 40px 90px -20px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.03);
+    overflow:hidden;
+    padding:52px 48px 44px;
+  }
+
+  /* soft vignette to sell the photographic depth */
+  .stage::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(ellipse 900px 700px at 30% 40%, transparent 55%, rgba(0,0,0,0.35) 100%);
+    pointer-events:none;
+    z-index:1;
+  }
+
+  /* corner arc flourish */
+  .arc{
+    position:absolute;
+    top:-140px; left:-140px;
+    width:340px; height:340px;
+    border-radius:50%;
+    border:10px solid transparent;
+    border-top-color:var(--gold);
+    border-right-color:var(--gold-dim);
+    opacity:0.55;
+    transform:rotate(-35deg);
+    z-index:1;
+  }
+
+  /* potted plant silhouette, lower right, echoing the photo backdrop */
+  .plant{
+    position:absolute;
+    right:2%;
+    bottom:0;
+    width:150px;
+    height:220px;
+    z-index:1;
+    opacity:0.5;
+    pointer-events:none;
+  }
+  .plant .leaf{
+    position:absolute;
+    background:linear-gradient(160deg, #2f5b3d, #12241a);
+    border-radius:0% 100% 0% 100%/0% 100% 0% 100%;
+  }
+  .plant .leaf:nth-child(1){ width:60px; height:130px; left:40px; bottom:40px; transform:rotate(-18deg); }
+  .plant .leaf:nth-child(2){ width:54px; height:120px; left:66px; bottom:46px; transform:rotate(12deg); }
+  .plant .leaf:nth-child(3){ width:46px; height:100px; left:20px; bottom:38px; transform:rotate(-42deg); }
+  .plant .leaf:nth-child(4){ width:46px; height:100px; left:88px; bottom:38px; transform:rotate(40deg); }
+  .plant .pot{
+    position:absolute;
+    left:48px; bottom:0;
+    width:70px; height:46px;
+    background:linear-gradient(180deg, #1c2a44, #0c1428);
+    border-radius:4px 4px 10px 10px;
+    border-top:3px solid rgba(217,174,78,0.25);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:1.05fr 1fr;
+    gap:40px;
+    position:relative;
+    z-index:2;
+  }
+  .devices{ position:relative; z-index:2; }
+
+  /* ---------- LEFT COLUMN ---------- */
+  .crown{
+    color:var(--gold);
+    text-align:left;
+    margin-bottom:6px;
+    filter:drop-shadow(0 0 10px rgba(217,174,78,0.55));
+    animation:glow 3.2s ease-in-out infinite;
+  }
+  .crown svg{ width:34px; height:34px; }
+  @keyframes glow{
+    0%,100%{filter:drop-shadow(0 0 8px rgba(217,174,78,0.45));}
+    50%{filter:drop-shadow(0 0 16px rgba(246,221,147,0.85));}
+  }
+
+  .eyebrow{
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    letter-spacing:6px;
+    font-size:20px;
+    color:var(--ivory);
+    margin-bottom:2px;
+  }
+
+  h1{
+    font-family:'Cinzel', serif;
+    font-weight:900;
+    font-size:clamp(44px, 6.2vw, 76px);
+    line-height:0.98;
+    letter-spacing:1px;
+    background:linear-gradient(180deg, #fdf1c8 0%, var(--gold) 45%, #a97f2c 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    filter:drop-shadow(0 3px 10px rgba(0,0,0,0.5));
+    margin:6px 0 18px;
+  }
+
+  .subtitle-banner{
+    display:inline-block;
+    font-family:'Cinzel', serif;
+    font-size:15px;
+    letter-spacing:3px;
+    font-weight:600;
+    color:var(--ivory);
+    background:linear-gradient(90deg, rgba(217,174,78,0.18), rgba(217,174,78,0.05));
+    border:1px solid var(--line);
+    padding:10px 22px;
+    clip-path:polygon(0 0,96% 0,100% 50%,96% 100%,0 100%);
+    margin-bottom:34px;
+  }
+
+  .meta-row{
+    display:flex;
+    gap:28px;
+    flex-wrap:wrap;
+    margin-bottom:34px;
+  }
+  .meta-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .icon-badge{
+    width:52px; height:52px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle at 35% 30%, #17265a, #0a1230);
+    border:2px solid var(--gold);
+    flex-shrink:0;
+    color:var(--gold);
+  }
+  .icon-badge svg{ width:22px; height:22px; }
+  .meta-label{
+    font-size:12px;
+    letter-spacing:2px;
+    color:var(--gold);
+    font-weight:600;
+    margin-bottom:2px;
+  }
+  .meta-value{
+    font-size:20px;
+    font-weight:700;
+    color:var(--ivory);
+  }
+  .meta-value.small{
+    font-size:14px;
+    font-weight:400;
+    max-width:220px;
+    line-height:1.4;
+    color:#d8d3c4;
+  }
+  .meta-value .today{
+    color:var(--gold-bright);
+  }
+
+  .footer-line{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    border-top:1px solid var(--line);
+    padding-top:26px;
+  }
+  .pray-icon{
+    color:var(--gold);
+  }
+  .pray-icon svg{ width:26px; height:26px; }
+  .footer-text p{
+    font-size:14px;
+    letter-spacing:1px;
+    color:#e7e2d3;
+    margin-bottom:6px;
+  }
+  .footer-text strong{
+    font-family:'Cinzel', serif;
+    font-size:18px;
+    letter-spacing:2px;
+    color:var(--gold-bright);
+  }
+
+  /* ---------- RIGHT COLUMN ---------- */
+  .right-col{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    position:relative;
+  }
+  .online-tag{
+    font-family:'Cinzel', serif;
+    letter-spacing:3px;
+    font-size:16px;
+    color:var(--ivory);
+    font-weight:600;
+  }
+  .online-tag em{
+    display:block;
+    font-family:'Poppins', sans-serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:26px;
+    color:var(--gold-bright);
+    margin-top:2px;
+  }
+  .divider-dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--gold);
+    margin:12px auto;
+  }
+
+  .cam-circle{
+    width:64px; height:64px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #2a3f8f, #111d47);
+    border:2px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold-bright);
+    margin:6px auto 14px;
+    cursor:pointer;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .cam-circle svg{ width:26px; height:26px; }
+  .cam-circle:hover{
+    transform:scale(1.08);
+    box-shadow:0 0 22px rgba(217,174,78,0.55);
+  }
+
+  .join-label{
+    font-family:'Cinzel', serif;
+    font-size:13px;
+    letter-spacing:2px;
+    color:var(--gold);
+    font-weight:600;
+    margin-bottom:10px;
+  }
+
+  .link-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border:1.5px solid var(--gold);
+    border-radius:10px;
+    padding:12px 16px;
+    background:rgba(217,174,78,0.06);
+    text-decoration:none;
+    color:var(--ivory);
+    font-size:13px;
+    max-width:260px;
+    word-break:break-all;
+    line-height:1.4;
+    transition:background .2s ease, transform .15s ease;
+    position:relative;
+  }
+  .link-box:hover{
+    background:rgba(217,174,78,0.16);
+    transform:translateY(-2px);
+  }
+  .link-box .chain{
+    color:var(--gold);
+    flex-shrink:0;
+    display:flex;
+  }
+  .link-box .chain svg{ width:16px; height:16px; }
+  .copied-toast{
+    position:absolute;
+    top:-30px; left:50%;
+    transform:translateX(-50%);
+    background:var(--gold);
+    color:#1a1200;
+    font-size:11px;
+    font-weight:700;
+    padding:4px 10px;
+    border-radius:6px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease;
+    white-space:nowrap;
+  }
+  .copied-toast.show{opacity:1;}
+
+  /* device mockups */
+  .devices{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:18px;
+    margin-top:30px;
+  }
+
+  .laptop{
+    width:100%;
+    max-width:440px;
+  }
+  .laptop-screen{
+    background:#0a0f22;
+    border:10px solid #1b2440;
+    border-bottom:none;
+    border-radius:14px 14px 0 0;
+    padding:10px;
+    box-shadow:0 20px 40px -12px rgba(0,0,0,0.6);
+  }
+  .laptop-base{
+    height:14px;
+    background:linear-gradient(180deg,#2a3252,#171d34);
+    border-radius:0 0 10px 10px;
+    position:relative;
+  }
+  .laptop-base::after{
+    content:"";
+    position:absolute;
+    left:50%; top:0;
+    transform:translateX(-50%);
+    width:80px; height:6px;
+    background:#0d1226;
+    border-radius:0 0 6px 6px;
+  }
+
+  .call-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:5px;
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .tile{
+    aspect-ratio:1/0.85;
+    display:flex; align-items:center; justify-content:center;
+    color:rgba(255,255,255,0.8);
+    position:relative;
+  }
+  .tile svg{ width:20px; height:20px; }
+  .tile span{
+    position:absolute;
+    bottom:4px; left:6px;
+    font-size:8px;
+    letter-spacing:0.5px;
+    color:rgba(255,255,255,0.6);
+    font-family:'Poppins',sans-serif;
+  }
+  .tile.t1{background:linear-gradient(155deg,#2b3868,#141b34);}
+  .tile.t2{background:linear-gradient(155deg,#33406e,#161e38);}
+  .tile.t3{background:linear-gradient(155deg,#2b3868,#12182e);}
+  .tile.t4{background:linear-gradient(155deg,#38416a,#161c33);}
+  .tile.t6{background:linear-gradient(155deg,#31406e,#151b32);}
+  .tile.t7{background:linear-gradient(155deg,#2c3866,#131a30);}
+  .tile.t8{background:linear-gradient(155deg,#38416c,#161d34);}
+  .tile.center{
+    grid-row:1/3;
+    background:radial-gradient(circle at 50% 40%, #16224e, #0a1230);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:6px;
+  }
+  .center .cross{
+    color:var(--gold-bright);
+    filter:drop-shadow(0 0 8px rgba(246,221,147,0.7));
+  }
+  .center .cross svg{ width:24px; height:24px; }
+  .center p{
+    font-size:9px;
+    letter-spacing:1px;
+    color:#e7e2d3;
+    line-height:1.6;
+  }
+  .center p b{color:var(--gold-bright); font-weight:600;}
+
+  .call-bar{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    padding:8px 0 2px;
+  }
+  .call-bar .btn{
+    width:26px; height:26px;
+    border-radius:50%;
+    background:#1c2542;
+    display:flex; align-items:center; justify-content:center;
+    color:#cfd3e6;
+  }
+  .call-bar .btn svg{ width:12px; height:12px; }
+  .call-bar .btn.end{
+    background:#c0392b;
+    color:#fff;
+  }
+
+  .phone{
+    width:110px;
+    flex-shrink:0;
+  }
+  .phone-body{
+    background:#0a0f22;
+    border:6px solid #1b2440;
+    border-radius:20px;
+    padding:12px 8px;
+    box-shadow:0 16px 34px -10px rgba(0,0,0,0.6);
+    text-align:center;
+  }
+  .phone-body .crown-mini{color:var(--gold);}
+  .phone-body .crown-mini svg{ width:14px; height:14px; }
+  .phone-body h4{
+    font-family:'Cinzel',serif;
+    font-size:11px;
+    color:var(--gold-bright);
+    letter-spacing:1px;
+    margin:4px 0 2px;
+    line-height:1.2;
+  }
+  .phone-body .tag{
+    font-size:7px;
+    color:var(--ivory);
+    background:rgba(217,174,78,0.12);
+    border:1px solid var(--line);
+    display:inline-block;
+    padding:2px 6px;
+    border-radius:4px;
+    margin-bottom:8px;
+  }
+  .phone-body .cross-mini{
+    color:var(--gold-bright);
+    margin:6px 0;
+    display:flex;
+    justify-content:center;
+  }
+  .phone-body .cross-mini svg{ width:16px; height:16px; }
+  .phone-body .ospop{
+    font-size:7px;
+    line-height:1.5;
+    color:#d8d3c4;
+    margin-bottom:8px;
+  }
+  .phone-body .plink{
+    font-size:6px;
+    color:var(--gold);
+    border:1px solid var(--line);
+    border-radius:5px;
+    padding:3px 4px;
+    word-break:break-all;
+    margin-bottom:8px;
+  }
+  .phone-body .pcam{
+    width:22px; height:22px;
+    border-radius:50%;
+    background:#16224e;
+    border:1px solid var(--gold);
+    margin:0 auto;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold-bright);
+  }
+  .phone-body .pcam svg{ width:10px; height:10px; }
+
+  @media (max-width:900px){
+    .grid{grid-template-columns:1fr;}
+    .stage{padding:36px 22px;}
+    .devices{flex-direction:column;}
+    .phone{display:none;}
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--gold-bright);
+    outline-offset:3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="arc"></div>
+  <div class="plant" aria-hidden="true">
+    <div class="pot"></div>
+    <div class="leaf"></div>
+    <div class="leaf"></div>
+    <div class="leaf"></div>
+    <div class="leaf"></div>
+  </div>
+
+  <div class="grid">
+
+    <!-- LEFT -->
+    <div class="left-col">
+      <div class="crown">&#9813;</div>
+      <div class="eyebrow">A NIGHT OF A</div>
+      <h1>THOUSAND<br>CRUSADE</h1>
+      <div class="subtitle-banner">THE URGENCY OF THE SPIRIT</div>
+
+      <div class="meta-row">
+        <div class="meta-item">
+          <div class="icon-badge">&#128337;</div>
+          <div>
+            <div class="meta-label">TIME</div>
+            <div class="meta-value">9:00 PM <span class="today">TODAY</span></div>
+          </div>
+        </div>
+        <div class="meta-item">
+          <div class="icon-badge">&#128197;</div>
+          <div>
+            <div class="meta-label">DON'T MISS IT!</div>
+            <div class="meta-value small">Be part of this powerful move of the Spirit.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-line">
+        <div class="pray-icon">&#128591;</div>
+        <div class="footer-text">
+          <p>ONE NIGHT. ONE SPIRIT. ONE PURPOSE.</p>
+          <strong>CONNECT WITH LIKE-MINDS</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-col">
+      <div class="online-tag">ONLINE<em>Meeting</em></div>
+      <div class="divider-dot"></div>
+
+      <div class="cam-circle" id="camBtn" role="button" tabindex="0" aria-label="Join the online meeting">&#127909;</div>
+      <div class="join-label">JOIN US ONLINE:</div>
+
+      <a class="link-box" id="joinLink" href="https://calendar.app.google/yakvEqDX6YhqZLGz9" target="_blank" rel="noopener">
+        <span class="chain">&#128279;</span>
+        <span>https://calendar.app.google/yakvEqDX6YhqZLGz9</span>
+        <span class="copied-toast" id="toast">Link copied!</span>
+      </a>
+
+      <div class="devices">
+        <div class="laptop">
+          <div class="laptop-screen">
+            <div class="call-grid">
+              <div class="tile t1">&#128591;<span>Bro. James</span></div>
+              <div class="tile t2">&#9995;<span>Sis. Grace</span></div>
+              <div class="tile t3">&#128591;<span>Pastor D.</span></div>
+              <div class="tile center">
+                <span class="cross">&#10013;</span>
+                <p>ONE NIGHT.<br>ONE SPIRIT.<br><b>ONE PURPOSE.</b></p>
+              </div>
+              <div class="tile t4">&#9995;<span>Min. Ruth</span></div>
+              <div class="tile t6">&#128591;<span>Elder S.</span></div>
+              <div class="tile t7">&#128591;<span>Bro. Kofi</span></div>
+              <div class="tile t8">&#9995;<span>Sis. Faith</span></div>
+            </div>
+            <div class="call-bar">
+              <div class="btn">&#127908;</div>
+              <div class="btn">&#127909;</div>
+              <div class="btn">&#128101;</div>
+              <div class="btn">&#8943;</div>
+              <div class="btn end">&#9742;</div>
+            </div>
+          </div>
+          <div class="laptop-base"></div>
+        </div>
+
+        <div class="phone">
+          <div class="phone-body">
+            <div class="crown-mini">&#9813;</div>
+            <h4>A NIGHT OF A<br>THOUSAND CRUSADE</h4>
+            <div class="tag">URGENCY OF THE SPIRIT</div>
+            <div class="cross-mini">&#10013;</div>
+            <div class="ospop">ONE NIGHT.<br>ONE SPIRIT.<br>ONE PURPOSE.</div>
+            <div class="plink">calendar.app.google/yakv...</div>
+            <div class="pcam">&#127909;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ambient floating gold particles
+  const stage = document.body;
+  for(let i=0;i<26;i++){
+    const p = document.createElement('div');
+    p.className='particle';
+    p.style.left = Math.random()*100+'vw';
+    p.style.bottom = (Math.random()*40)+'vh';
+    p.style.animationDelay = (Math.random()*9)+'s';
+    p.style.animationDuration = (7+Math.random()*6)+'s';
+    stage.appendChild(p);
+  }
+
+  // clicking the camera icon also opens the join link
+  document.getElementById('camBtn').addEventListener('click', ()=>{
+    window.open('https://calendar.app.google/yakvEqDX6YhqZLGz9','_blank','noopener');
+  });
+  document.getElementById('camBtn').addEventListener('keydown', (e)=>{
+    if(e.key==='Enter' || e.key===' '){
+      e.preventDefault();
+      window.open('https://calendar.app.google/yakvEqDX6YhqZLGz9','_blank','noopener');
+    }
+  });
+
+  // copy-to-clipboard feedback on the link box (still navigates via href)
+  const link = document.getElementById('joinLink');
+  const toast = document.getElementById('toast');
+  link.addEventListener('click', (e)=>{
+    navigator.clipboard?.writeText(link.href).catch(()=>{});
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'), 1400);
+  });
+</script>
+
+</body>
+</html>
